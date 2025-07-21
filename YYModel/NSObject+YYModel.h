@@ -13,6 +13,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
+
 /**
  Provide some data-model method:
  
@@ -79,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return A new instance created from the json, or nil if an error occurs.
  */
-+ (nullable instancetype)yy_modelWithJSON:(id)json;
++ (nullable instancetype)yy_modelWithJSON:(nullable id)json;
 
 /**
  Creates and returns a new instance of the receiver from a key-value dictionary.
@@ -100,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
      `NSValue` -> struct or union, such as CGRect, CGSize, ...
      `NSString` -> SEL, Class.
  */
-+ (nullable instancetype)yy_modelWithDictionary:(NSDictionary *)dictionary;
++ (nullable instancetype)yy_modelWithDictionary:(nullable NSDictionary *)dictionary;
 
 /**
  Set the receiver's properties with a json object.
@@ -112,7 +115,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return Whether succeed.
  */
-- (BOOL)yy_modelSetWithJSON:(id)json;
+- (BOOL)yy_modelSetWithJSON:(nullable id)json;
 
 /**
  Set the receiver's properties with a key-value dictionary.
@@ -132,7 +135,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return Whether succeed.
  */
-- (BOOL)yy_modelSetWithDictionary:(NSDictionary *)dic;
+- (BOOL)yy_modelSetWithDictionary:(nullable NSDictionary *)dic;
 
 /**
  Generate a json object from the receiver's properties.
@@ -205,7 +208,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return `YES` if the reciever is equal to the object, otherwise `NO`.
  */
-- (BOOL)yy_modelIsEqual:(id)model;
+- (BOOL)yy_modelIsEqual:(nullable id)model;
 
 /**
  Description method for debugging purposes based on properties.
@@ -233,7 +236,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return A array, or nil if an error occurs.
  */
-+ (nullable NSArray *)yy_modelArrayWithClass:(Class)cls json:(id)json;
++ (nullable NSArray *)yy_modelArrayWithClass:(Class)cls json:(nullable id)json;
 
 @end
 
@@ -254,7 +257,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return A dictionary, or nil if an error occurs.
  */
-+ (nullable NSDictionary *)yy_modelDictionaryWithClass:(Class)cls json:(id)json;
++ (nullable NSDictionary *)yy_modelDictionaryWithClass:(Class)cls json:(nullable id)json;
 @end
 
 
@@ -436,5 +439,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic;
 
 @end
+
+#pragma clang diagnostic pop
 
 NS_ASSUME_NONNULL_END
