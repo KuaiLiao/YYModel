@@ -72,6 +72,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSObject (YYModel)
 
 /**
+ Associate dictionary to the object before decode to model.
+ */
+@property (atomic, copy, nullable, readonly) NSDictionary *yy_decodedDict;
+
+/**
  Creates and returns a new dictionary of the receiver from a json.
  This method is thread-safe.
  

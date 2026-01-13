@@ -1431,6 +1431,10 @@ static NSString *ModelDescription(NSObject *model) {
 
 @implementation NSObject (YYModel)
 
+- (NSDictionary *)yy_decodedDict {
+    return objc_getAssociatedObject(self, @selector(yy_decodedDict));
+}
+
 + (NSDictionary *)_yy_dictionaryWithJSON:(id)json {
     if (!json || json == (id)kCFNull) return nil;
     NSDictionary *dic = nil;
@@ -1485,6 +1489,17 @@ static NSString *ModelDescription(NSObject *model) {
 
     _YYModelMeta *modelMeta = [_YYModelMeta metaWithClass:object_getClass(self)];
     if (modelMeta->_keyMappedCount == 0) return NO;
+    
+    // associate dict to object
+    NSDictionary *willDecodeDict = self.yy_decodedDict;
+    if (willDecodeDict) {
+        NSMutableDictionary *mutDict = willDecodeDict.mutableCopy;
+        [mutDict addEntriesFromDictionary:dic];
+        willDecodeDict = mutDict;
+    } else {
+        willDecodeDict = dic;
+    }
+    objc_setAssociatedObject(self, @selector(yy_decodedDict), willDecodeDict, OBJC_ASSOCIATION_COPY);
     
     if (modelMeta->_hasCustomWillTransformFromDictionary) {
         dic = [((id<YYModel>)self) modelCustomWillTransformFromDictionary:dic];
