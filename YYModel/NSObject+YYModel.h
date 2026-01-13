@@ -13,9 +13,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdocumentation"
-
 /**
  Provide some data-model method:
  
@@ -449,7 +446,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic;
 
 @end
-
-#pragma clang diagnostic pop
 
 NS_ASSUME_NONNULL_END
