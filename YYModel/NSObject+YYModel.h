@@ -75,6 +75,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSObject (YYModel)
 
 /**
+ Creates and returns a new dictionary of the receiver from a json.
+ This method is thread-safe.
+ 
+ @param json  A json object in `NSDictionary`, `NSString` or `NSData`.
+ 
+ @return A new dictionary created from the json, or nil if an error occurs.
+ */
++ (nullable NSDictionary *)yy_dictionaryWithJSON:(nullable id)json;
+
+/**
  Creates and returns a new instance of the receiver from a json.
  This method is thread-safe.
  

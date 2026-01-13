@@ -1449,6 +1449,10 @@ static NSString *ModelDescription(NSObject *model) {
     return dic;
 }
 
++ (NSDictionary *)yy_dictionaryWithJSON:(id)json {
+    return [self _yy_dictionaryWithJSON:json];
+}
+
 + (instancetype)yy_modelWithJSON:(id)json {
     NSDictionary *dic = [self _yy_dictionaryWithJSON:json];
     return [self yy_modelWithDictionary:dic];
