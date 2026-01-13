@@ -311,10 +311,12 @@ NS_ASSUME_NONNULL_BEGIN
         
         @implementation YYBook
         + (NSDictionary *)modelCustomPropertyMapper {
-            return @{@"name"  : @"n",
-                     @"page"  : @"p",
-                     @"desc"  : @"ext.desc",
-                     @"bookID": @[@"id", @"ID", @"book_id"]};
+            return @{
+                @"name"  : @"n",
+                @"page"  : @"p",
+                @"desc"  : @"ext.desc",
+                @"bookID": @[@"id", @"ID", @"book_id"]
+            };
         }
         @end
      @endcode
@@ -343,9 +345,11 @@ NS_ASSUME_NONNULL_BEGIN
  
         @implementation YYAttributes
         + (NSDictionary *)modelContainerPropertyGenericClass {
-            return @{@"shadows" : [YYShadow class],
-                     @"borders" : YYBorder.class,
-                     @"attachments" : @"YYAttachment" };
+            return @{
+                @"shadows" : [YYShadow class],
+                @"borders" : YYBorder.class,
+                @"attachments" : @"YYAttachment"
+            };
         }
         @end
   @endcode
