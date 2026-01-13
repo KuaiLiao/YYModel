@@ -21,5 +21,10 @@ Pod::Spec.new do |s|
   s.public_header_files = 'YYModel/*.{h}'
   
   s.frameworks = 'Foundation', 'CoreFoundation'
+  
+  #spec.compiler_flags = "-Wdocumentation-unknown-command", "-Wdocumentation"
+  s.pod_target_xcconfig     = {
+    'CLANG_WARN_DOCUMENTATION_COMMENTS' => 'NO'
+  }
 
 end
