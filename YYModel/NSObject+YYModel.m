@@ -1442,7 +1442,7 @@ static NSString *ModelDescription(NSObject *model) {
     if ([json isKindOfClass:[NSDictionary class]]) {
         dic = json;
     } else if ([json isKindOfClass:[NSString class]]) {
-        jsonData = [(NSString *)json dataUsingEncoding : NSUTF8StringEncoding];
+        jsonData = [(NSString *)json dataUsingEncoding: NSUTF8StringEncoding];
     } else if ([json isKindOfClass:[NSData class]]) {
         jsonData = json;
     }
@@ -1799,7 +1799,7 @@ static NSString *ModelDescription(NSObject *model) {
     if ([json isKindOfClass:[NSArray class]]) {
         arr = json;
     } else if ([json isKindOfClass:[NSString class]]) {
-        jsonData = [(NSString *)json dataUsingEncoding : NSUTF8StringEncoding];
+        jsonData = [(NSString *)json dataUsingEncoding: NSUTF8StringEncoding];
     } else if ([json isKindOfClass:[NSData class]]) {
         jsonData = json;
     }
@@ -1833,7 +1833,7 @@ static NSString *ModelDescription(NSObject *model) {
     if ([json isKindOfClass:[NSDictionary class]]) {
         dic = json;
     } else if ([json isKindOfClass:[NSString class]]) {
-        jsonData = [(NSString *)json dataUsingEncoding : NSUTF8StringEncoding];
+        jsonData = [(NSString *)json dataUsingEncoding: NSUTF8StringEncoding];
     } else if ([json isKindOfClass:[NSData class]]) {
         jsonData = json;
     }
