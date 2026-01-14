@@ -15,6 +15,12 @@
 
 #define force_inline __inline__ __attribute__((always_inline))
 
+#ifndef yy_defer
+static void yy_defer_cleanup_block(__strong void(^*block)(void)) { (*block)(); }
+#define yy_defer_block_name(suffix) yy_defer_ ## suffix
+#define yy_defer __strong void(^yy_defer_block_name(__LINE__))(void) __attribute__((cleanup(yy_defer_cleanup_block), unused)) = ^
+#endif
+
 /// Foundation Class Type
 typedef NS_ENUM (NSUInteger, YYEncodingNSType) {
     YYEncodingTypeNSUnknown = 0,
@@ -471,7 +477,8 @@ static force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic
     BOOL _hasCustomTransformFromDictionary;
     BOOL _hasCustomTransformToDictionary;
     BOOL _hasCustomClassFromDictionary;
-    BOOL _needAssociateOriginDictionary;
+    BOOL _hasModelDecodeFinished;
+    BOOL _modelNeedAssociateOriginDictionary;
 }
 @end
 
@@ -621,10 +628,11 @@ static force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic
     _hasCustomTransformFromDictionary = ([cls instancesRespondToSelector:@selector(modelCustomTransformFromDictionary:)]);
     _hasCustomTransformToDictionary = ([cls instancesRespondToSelector:@selector(modelCustomTransformToDictionary:)]);
     _hasCustomClassFromDictionary = ([cls respondsToSelector:@selector(modelCustomClassForDictionary:)]);
-    _needAssociateOriginDictionary = ({
+    _hasModelDecodeFinished = ([cls instancesRespondToSelector:@selector(modelDecodeFinished)]);
+    _modelNeedAssociateOriginDictionary = ({
         BOOL isAssociate = NO;
-        if ([cls respondsToSelector:@selector(needAssociateOriginDict)]) {
-            isAssociate = [(id<YYModel>)cls needAssociateOriginDict];
+        if ([cls respondsToSelector:@selector(modelNeedAssociateOriginDict)]) {
+            isAssociate = [((id<YYModel>)cls) modelNeedAssociateOriginDict];
         }
         isAssociate;
     });
@@ -1495,7 +1503,7 @@ static NSString *ModelDescription(NSObject *model) {
     if (modelMeta->_keyMappedCount == 0) return NO;
     
     // associate dict to object
-    if (modelMeta->_needAssociateOriginDictionary) {
+    if (modelMeta->_modelNeedAssociateOriginDictionary) {
         NSDictionary *hasDecodedDict = self.yy_decodedDict;
         if (hasDecodedDict) {
             NSMutableDictionary *mutDict = hasDecodedDict.mutableCopy;
@@ -1510,6 +1518,12 @@ static NSString *ModelDescription(NSObject *model) {
         dic = [((id<YYModel>)self) modelCustomWillTransformFromDictionary:dic];
         if (![dic isKindOfClass:[NSDictionary class]]) return NO;
     }
+    
+    yy_defer {
+        if (modelMeta->_hasModelDecodeFinished) {
+            [((id<YYModel>)self) modelDecodeFinished];
+        }
+    };
     
     ModelSetContext context = {0};
     context.modelMeta = (__bridge void *)(modelMeta);

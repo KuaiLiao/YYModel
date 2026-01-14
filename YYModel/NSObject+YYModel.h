@@ -455,9 +455,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic;
 
 /**
+ called when decode finished.
+ */
+- (void)modelDecodeFinished;
+
+/**
  Whether need to save the original json data
  */
-+ (BOOL)needAssociateOriginDict;
++ (BOOL)modelNeedAssociateOriginDict;
 
 @end
 
