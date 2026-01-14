@@ -471,6 +471,7 @@ static force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic
     BOOL _hasCustomTransformFromDictionary;
     BOOL _hasCustomTransformToDictionary;
     BOOL _hasCustomClassFromDictionary;
+    BOOL _needAssociateOriginDictionary;
 }
 @end
 
@@ -620,6 +621,13 @@ static force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic
     _hasCustomTransformFromDictionary = ([cls instancesRespondToSelector:@selector(modelCustomTransformFromDictionary:)]);
     _hasCustomTransformToDictionary = ([cls instancesRespondToSelector:@selector(modelCustomTransformToDictionary:)]);
     _hasCustomClassFromDictionary = ([cls respondsToSelector:@selector(modelCustomClassForDictionary:)]);
+    _needAssociateOriginDictionary = ({
+        BOOL isAssociate = NO;
+        if ([cls respondsToSelector:@selector(needAssociateOriginDict)]) {
+            isAssociate = [(id<YYModel>)cls needAssociateOriginDict];
+        }
+        isAssociate;
+    });
     
     return self;
 }
@@ -1431,10 +1439,6 @@ static NSString *ModelDescription(NSObject *model) {
 
 @implementation NSObject (YYModel)
 
-- (NSDictionary *)yy_decodedDict {
-    return objc_getAssociatedObject(self, @selector(yy_decodedDict));
-}
-
 + (NSDictionary *)_yy_dictionaryWithJSON:(id)json {
     if (!json || json == (id)kCFNull) return nil;
     NSDictionary *dic = nil;
@@ -1491,15 +1495,16 @@ static NSString *ModelDescription(NSObject *model) {
     if (modelMeta->_keyMappedCount == 0) return NO;
     
     // associate dict to object
-    NSDictionary *willDecodeDict = self.yy_decodedDict;
-    if (willDecodeDict) {
-        NSMutableDictionary *mutDict = willDecodeDict.mutableCopy;
-        [mutDict addEntriesFromDictionary:dic];
-        willDecodeDict = mutDict;
-    } else {
-        willDecodeDict = dic;
+    if (modelMeta->_needAssociateOriginDictionary) {
+        NSDictionary *hasDecodedDict = self.yy_decodedDict;
+        if (hasDecodedDict) {
+            NSMutableDictionary *mutDict = hasDecodedDict.mutableCopy;
+            [mutDict addEntriesFromDictionary:dic];
+            self.yy_decodedDict = mutDict;
+        } else {
+            self.yy_decodedDict = dic;
+        }
     }
-    objc_setAssociatedObject(self, @selector(yy_decodedDict), willDecodeDict, OBJC_ASSOCIATION_COPY);
     
     if (modelMeta->_hasCustomWillTransformFromDictionary) {
         dic = [((id<YYModel>)self) modelCustomWillTransformFromDictionary:dic];
@@ -1784,6 +1789,16 @@ static NSString *ModelDescription(NSObject *model) {
 
 - (NSString *)yy_modelDescription {
     return ModelDescription(self);
+}
+
+#pragma mark - Property
+
+- (NSDictionary *)yy_decodedDict {
+    return objc_getAssociatedObject(self, @selector(yy_decodedDict));
+}
+
+- (void)setYy_decodedDict:(NSDictionary *)yy_decodedDict {
+    objc_setAssociatedObject(self, @selector(yy_decodedDict), yy_decodedDict, OBJC_ASSOCIATION_COPY);
 }
 
 @end

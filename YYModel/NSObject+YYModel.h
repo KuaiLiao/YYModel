@@ -72,9 +72,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSObject (YYModel)
 
 /**
- Associate dictionary to the object before decode to model.
+ Associate dictionary to the object before decode to model if `needAssociateOriginDict` is `YES`.
  */
-@property (atomic, copy, nullable, readonly) NSDictionary *yy_decodedDict;
+@property (atomic, copy, nullable) NSDictionary *yy_decodedDict;
 
 /**
  Creates and returns a new dictionary of the receiver from a json.
@@ -453,6 +453,11 @@ NS_ASSUME_NONNULL_BEGIN
  @return Returns YES if the model is valid, or NO to ignore this model.
  */
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic;
+
+/**
+ Whether need to save the original json data
+ */
++ (BOOL)needAssociateOriginDict;
 
 @end
 
